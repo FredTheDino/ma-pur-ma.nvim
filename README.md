@@ -31,6 +31,12 @@ This code is probably buggy, if you find a piece of code this doesn't work on, s
 
 Make an issue with the code and what you expect to happen, and I'll get to i when I get to it. :)
 
+You need to enable the [tree-sitter highlighter](https://github.com/nvim-treesitter/playground/issues/64) for this plugin to work properly - I know no other way around this.
+```
+TSEnable highlight
+```
+
+
 ## Things to do
  - [ ] Would be great with some unit tests for this - should be easily doable with `nvim --cmd`
  - [ ] `inline_function` would be great
