@@ -1,0 +1,66 @@
+*ma-pur-ma.txt*                           Street smart macros for PureScript
+
+Authors:
+  Edvard Thörnros <edvard.thornros@gmail.com>
+
+                                       Type |gO| to see the table of contents.
+
+==============================================================================
+INTRODUCTION                                           *ma-pur-ma-intro*
+
+The PureScript LSP is good and all - but has some missing nicities. This repo
+contains macros for doing common operations while writing purse - some
+operations include:
+  - Extract expression to function
+  - Toggle exports
+  - Autofill `case`-expressions
+
+==============================================================================
+QUICK START                                       *ma-pur-ma-quickstart*
+
+Make sure you have a tree-sitter parser installed for PureScript. Adding the
+treesitter pluggin and running a quick `TSInstall purescript` should get you
+settled in nicely.
+
+This plugin can generate some poorly formatted code - it is recomended to pair
+it with a formatter like `purs-tidy`.
+
+Then generate bindings for these commands
+>
+  require"ma-pur-ma.nvim".extract_to_function()<CR> 
+  require"ma-pur-ma.nvim".fill_in_data_case()<CR> 
+  require"ma-pur-ma.nvim".if_to_case()<CR> 
+  require"ma-pur-ma.nvim".toggle_import()<CR> 
+<
+
+Some of these commands have requirements to work. and will be discussed in
+further detail.
+
+>
+  require"ma-pur-ma.nvim".extract_to_function()<CR> 
+<
+Place the cursor on the expression you want to extract, then trigger this
+function. A new function is created above the current one with the required
+arguments passed through.
+
+>
+  require"ma-pur-ma.nvim".fill_in_data_case()<CR> 
+<
+Write the name of the `data`-type and place your cursor on it, then trigger
+this function. A case expression is then inserted with all the constructors of
+the `data`-type.
+
+>
+  require"ma-pur-ma.nvim".if_to_case()<CR> 
+<
+Place your cursor inside an `if`-expression, then trigger this function. If
+expression is replaced with corresponding `true ->` and `false ->` branches.
+
+>
+  require"ma-pur-ma.nvim".toggle_import()<CR> 
+<
+Place your cursor inside a top-level declaration, then trigger this function.
+The import is added to the front of the export list if it is not present,
+otherwise it is added to the end.
+
+vim:tw=78:ts=8:expandtab:noet:ft=help:norl:
