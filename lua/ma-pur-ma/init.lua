@@ -223,9 +223,6 @@ function M.extract_to_function()
   vim.api.nvim_buf_set_lines(bufnr, start_row - 1, start_row - 1, false, def)
 end
 
--- inline function
--- remove from import list
--- add to import list
 
 function M.toggle_import() 
   local bufnr = vim.api.nvim_get_current_buf()
@@ -384,5 +381,7 @@ function M.fill_in_data_case()
   end
   vim.api.nvim_buf_set_text(bufnr, start_row, start_col, end_row, end_col, replacements)
 end
+
+-- inline function
 
 return M
