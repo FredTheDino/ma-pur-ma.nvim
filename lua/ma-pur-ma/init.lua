@@ -12,6 +12,17 @@ local function bandaid_largest_node(node)
     return bandaid_largest_node(get_child(node, 2))
   elseif node:type() == "exp_let" then
     return bandaid_largest_node(node:parent())
+  elseif node:type() == "decls" then
+    return bandaid_largest_node(find_first_child_of_type("function"), node)
+  elseif node:type() == "function" then
+    local c
+    for n in node:iter_children() do
+      if n:named() then
+        print(n)
+        c = n
+      end
+    end
+    return bandaid_largest_node(c or node:parent())
   else
     return node
   end
@@ -26,6 +37,23 @@ local function get_first_parent_node_of_type(ty)
 
   return node
 end
+
+local function get_top_node_of_type(ty, node)
+  local node = node or ts_utils.get_node_at_cursor()
+  local best
+  while (node ~= nil) do
+    while (node ~= nil and node:type() ~= ty) do
+      node = node:parent()
+    end
+    if node then
+      best = node
+      node = node:parent()
+    end
+  end
+
+  return best
+end
+
 
 local function get_top_node(node)
   while (node:parent() ~= node:root()) do
@@ -189,7 +217,8 @@ end
 function M.extract_to_function() 
   local bufnr = vim.api.nvim_get_current_buf()
   local at = bandaid_largest_node(ts_utils.get_node_at_cursor())
-  local node = get_first_parent_node_of_type("function")
+  local node = get_top_node_of_type("function")
+  print("RET", node, node:range())
   local _, outer = find_usages_and_definitions_at(node, {}, at, bufnr)
   local _, inner = find_usages_and_definitions_at(at, new_scope(outer), nil, bufnr)
   -- print(vim.inspect({ outer, inner }))
@@ -218,7 +247,7 @@ function M.extract_to_function()
   local start_row, start_col, end_row, end_col = at:range()
   vim.api.nvim_buf_set_text(bufnr, start_row, start_col, end_row, end_col, { "(" .. f_new .. ")" })
 
-  local start_row, _, _, _ = node:range()
+  local _, _, end_row, _ = node:range()
   vim.api.nvim_buf_set_lines(bufnr, end_row + 1, end_row + 1, false, def)
 end
 
@@ -227,27 +256,27 @@ function M.toggle_import()
   local bufnr = vim.api.nvim_get_current_buf()
 
   local to_export
-  local p = get_first_parent_node_of_type("function")
+  local p = get_top_node_of_type("function")
   if p then
     local f = find_first_child_of_type(p, "variable")
     to_export = get_text_at_node(f, bufnr)
   end
-  local p = get_first_parent_node_of_type("data")
+  local p = get_top_node_of_type("data")
   if p then
     local f = find_first_child_of_type(p, "type")
     to_export = get_text_at_node(f, bufnr) .. "(..)"
   end
-  local p = get_first_parent_node_of_type("type_alias")
+  local p = get_top_node_of_type("type_alias")
   if p then
     local f = find_first_child_of_type(p, "type"):next_sibling()
     to_export = get_text_at_node(f, bufnr)
   end
-  local p = get_first_parent_node_of_type("newtype")
+  local p = get_top_node_of_type("newtype")
   if p then
     local f = find_first_child_of_type(p, "type")
     to_export = get_text_at_node(f, bufnr) .. "(..)"
   end
-  local p = get_first_parent_node_of_type("class_declaration")
+  local p = get_top_node_of_type("class_declaration")
   if p then
     local f = find_first_child_of_type(p, "class_head")
     local g = find_first_child_of_type(f, "class_name")
