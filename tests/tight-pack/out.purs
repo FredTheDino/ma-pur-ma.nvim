@@ -14,3 +14,4 @@ f a b =
 
 extracted q1 q2 =
   q1 + q2
+g = 1

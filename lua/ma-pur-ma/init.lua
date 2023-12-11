@@ -187,7 +187,6 @@ local function find_usages_and_definitions_at(at, locals, final, bufnr)
 end
 
 function M.extract_to_function() 
-  -- M.extract_to_function()
   local bufnr = vim.api.nvim_get_current_buf()
   local at = bandaid_largest_node(ts_utils.get_node_at_cursor())
   local node = get_first_parent_node_of_type("function")
@@ -220,7 +219,7 @@ function M.extract_to_function()
   vim.api.nvim_buf_set_text(bufnr, start_row, start_col, end_row, end_col, { "(" .. f_new .. ")" })
 
   local start_row, _, _, _ = node:range()
-  vim.api.nvim_buf_set_lines(bufnr, start_row - 1, start_row - 1, false, def)
+  vim.api.nvim_buf_set_lines(bufnr, end_row + 1, end_row + 1, false, def)
 end
 
 
@@ -381,7 +380,7 @@ function M.fill_in_data_case()
   end
   vim.api.nvim_buf_set_text(bufnr, start_row, start_col, end_row, end_col, replacements)
 end
-
+--
 -- inline function
 
 return M
