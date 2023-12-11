@@ -5,7 +5,9 @@ import Prelude
 
 extracted q1 q2 =
   q1 + q2
-f :: Int -> Int -> Int
+f :: Int
+  -> Int
+  -> Int
 f a b =
   let
     q1 = a + 1

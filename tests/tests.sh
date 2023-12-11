@@ -9,9 +9,12 @@ do
   echo $(dirname $T)
   pushd $(dirname $T) > /dev/null
   bash run.sh
+  echo ""
+  diff --color out.purs gen.purs
   S=$?
   if [[ $S == 0 ]]
   then
+    rm -f gen.purs
     echo "$(dirname $T) PASS"
   else
     echo "$(dirname $T) FAIL"
