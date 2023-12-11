@@ -18,7 +18,6 @@ local function bandaid_largest_node(node)
     local c
     for n in node:iter_children() do
       if n:named() then
-        print(n)
         c = n
       end
     end
@@ -218,10 +217,8 @@ function M.extract_to_function()
   local bufnr = vim.api.nvim_get_current_buf()
   local at = bandaid_largest_node(ts_utils.get_node_at_cursor())
   local node = get_top_node_of_type("function")
-  print("RET", node, node:range())
   local _, outer = find_usages_and_definitions_at(node, {}, at, bufnr)
   local _, inner = find_usages_and_definitions_at(at, new_scope(outer), nil, bufnr)
-  -- print(vim.inspect({ outer, inner }))
 
   f_new = "extracted"
   for _, def in pairs(inner) do
