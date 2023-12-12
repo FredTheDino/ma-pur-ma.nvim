@@ -219,6 +219,7 @@ function M.extract_to_function()
 
   local at
   if vim.api.nvim_get_mode().mode:lower():find("v") then
+    -- NOTE[et]: This isn't that robust - if the user has different bindings this will break - which is annoying.
     local at0 = ts_utils.get_node_at_cursor()
     vim.cmd.normal("o")
     local at1 = ts_utils.get_node_at_cursor()
