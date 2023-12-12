@@ -215,8 +215,25 @@ end
 
 function M.extract_to_function() 
   local bufnr = vim.api.nvim_get_current_buf()
-  local at = bandaid_largest_node(ts_utils.get_node_at_cursor())
   local node = get_top_node_of_type("function")
+
+  local at
+  if vim.api.nvim_get_mode().mode:lower():find("v") then
+    local at0 = ts_utils.get_node_at_cursor()
+    vim.cmd.normal("o")
+    local at1 = ts_utils.get_node_at_cursor()
+    vim.api.nvim_input("<ESC>")
+    print(at0, at1)
+    at = at0
+    while at and not (vim.treesitter.is_ancestor(at, at0) and vim.treesitter.is_ancestor(at, at1)) do
+      at = at:parent()
+    end
+    if at == nil then
+      exit("Couldn't find a node for the range")
+    end
+  else
+    at = bandaid_largest_node(ts_utils.get_node_at_cursor())
+  end
   local _, outer = find_usages_and_definitions_at(node, {}, at, bufnr)
   local _, inner = find_usages_and_definitions_at(at, new_scope(outer), nil, bufnr)
 

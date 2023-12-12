@@ -21,7 +21,8 @@ Then you will want to define some mappings for the operations this plugin allows
 ```
 local mpm = require "ma-pur-ma"
 vim.keymap.set('n', '<SPACE>pe', mpm.extract_to_function)
-vim.keymap.set('n', '<SPACE>pi', mpm.toggle_import)
+vim.keymap.set('v', '<SPACE>pe', mpm.extract_to_function)
+vim.keymap.set('n', '<SPACE>pi', mpm.toggle_export)
 vim.keymap.set('n', '<SPACE>pf', mpm.if_to_case)
 vim.keymap.set('n', '<SPACE>pc', mpm.fill_in_data_case)
 ```

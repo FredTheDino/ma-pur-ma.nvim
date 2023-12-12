@@ -30,7 +30,7 @@ Then generate bindings for these commands
   require"ma-pur-ma.nvim".extract_to_function()<CR> 
   require"ma-pur-ma.nvim".fill_in_data_case()<CR> 
   require"ma-pur-ma.nvim".if_to_case()<CR> 
-  require"ma-pur-ma.nvim".toggle_import()<CR> 
+  require"ma-pur-ma.nvim".toggle_export()<CR> 
 <
 
 Some of these commands have requirements to work. and will be discussed in
@@ -57,10 +57,12 @@ Place your cursor inside an `if`-expression, then trigger this function. If
 expression is replaced with corresponding `true ->` and `false ->` branches.
 
 >
-  require"ma-pur-ma.nvim".toggle_import()<CR> 
+  require"ma-pur-ma.nvim".toggle_export()<CR> 
 <
 Place your cursor inside a top-level declaration, then trigger this function.
-The import is added to the front of the export list if it is not present,
-otherwise it is added to the end.
+The *thing* is added to the front of the export list if it is not present.
+If it is currently exported - it is instead removed.
+
+Currently doesn't work with modules.
 
 vim:tw=78:ts=8:expandtab:noet:ft=help:norl:
