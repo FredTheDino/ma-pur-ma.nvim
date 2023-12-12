@@ -4,11 +4,11 @@ NUM=$(find . -name "run.sh" | wc -l )
 echo "Found $NUM tests"
 
 PASS=1
-for T in $(find . -name "run.sh");
+for T in $(find . -name "test.nvim");
 do
   echo $(dirname $T)
   pushd $(dirname $T) > /dev/null
-  bash run.sh
+  nvim src.purs --headless -S test.nvim -c "saveas! gen.purs" -c "q"
   echo ""
   diff --color out.purs gen.purs
   S=$?

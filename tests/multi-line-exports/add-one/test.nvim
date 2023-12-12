@@ -1,0 +1,2 @@
+norm 14gg 
+lua require'ma-pur-ma'.toggle_export() 

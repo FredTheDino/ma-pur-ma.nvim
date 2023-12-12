@@ -1,0 +1,2 @@
+norm 12ggw
+lua require'ma-pur-ma'.extract_to_function()

@@ -248,8 +248,12 @@ function M.extract_to_function()
   vim.api.nvim_buf_set_lines(bufnr, end_row + 1, end_row + 1, false, def)
 end
 
-
+-- TODO[et]: Remove sometime
 function M.toggle_import() 
+  M.toggle_export()
+end
+
+function M.toggle_export() 
   local bufnr = vim.api.nvim_get_current_buf()
 
   local to_export
@@ -291,13 +295,16 @@ function M.toggle_import()
   local is_multiline = false
   local num_exports = 0
   local export
+  local _, l = exports:range()
   for c in exports:iter_children() do
     if c:type() == "export"
+    and get_text_at_node(c, bufnr) ~= "("
+    and get_text_at_node(c, bufnr) ~= ")"
     and get_text_at_node(c, bufnr) ~= ""
     then
       num_exports = num_exports + 1
     end
-    if  c:type() == "export"
+    if c:type() == "export"
     and get_text_at_node(c, bufnr) == to_export
     then
       export = c
@@ -317,7 +324,7 @@ function M.toggle_import()
     elseif export:next_sibling():type() == "comma" then
       local comma_row, comma_col = export:next_sibling():range()
       end_row = comma_row
-      end_col = comma_col + 1
+      end_col = comma_col + 2
     end
     vim.api.nvim_buf_set_text(bufnr, start_row, start_col, end_row, end_col, {})
   else
@@ -326,7 +333,11 @@ function M.toggle_import()
     if num_exports == 0 then
       vim.api.nvim_buf_set_text(bufnr, start_row, start_col, end_row, end_col, { "(" .. to_export .. ")" })
     else
-    vim.api.nvim_buf_set_text(bufnr, start_row, start_col + 1, end_row, start_col + 1, { to_export .. "," })
+      if is_multiline then
+        vim.api.nvim_buf_set_text(bufnr, start_row, start_col + 1, start_row, start_col + 1, { " " .. to_export, "  ," })
+      else
+        vim.api.nvim_buf_set_text(bufnr, start_row, start_col + 1, start_row, start_col + 1, { to_export .. "," })
+      end
     end
   end
 end

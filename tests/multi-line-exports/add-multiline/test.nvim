@@ -1,0 +1,5 @@
+norm 14gg 
+lua require'ma-pur-ma'.toggle_export() 
+saveas! gen.purs
+e
+lua require'ma-pur-ma'.toggle_export() 
